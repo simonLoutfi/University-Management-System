@@ -1,0 +1,163 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <style>
+        /* General Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        /* Sections */
+        section {
+            background: #fff;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #444;
+            margin-bottom: 15px;
+        }
+
+        /* Form Styling */
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        input, select, button {
+            width: 80%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #5c67f2;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+        }
+
+        button:hover {
+            background-color: #4a54e1;
+        }
+
+        /* Course List */
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background: #eef;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: left;
+        }
+
+        li h3 {
+            margin: 0;
+            color: #333;
+        }
+
+        li p {
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <form action="{% url 'logout' %}" method="POST">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+    </form>
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+            <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    
+
+    <h1>Welcome, {{ user.username }}!</h1>
+    {% if user.student_profile.document %}
+    <a href="{{ user.student_profile.document.url }}" target="_blank">
+        {{ user.student_profile.document.name }}
+    </a>
+    {% else %}
+        <p>No document uploaded.</p>
+    {% endif %}
+
+    <section>
+        <h2>Update Email</h2>
+        <form method="POST" action="{% url 'update_email' %}">
+            {% csrf_token %}
+            <label for="email">New Email:</label>
+            <input type="email" name="email" value="" required>
+            <button type="submit">Update</button>
+        </form>
+    </section>
+
+    <section>
+        <h2>Search & Filter Courses</h2>
+        <form method="GET">
+            <input type="text" name="search" placeholder="Search for a course..." value="{{ request.GET.search }}">
+            <select name="order">
+                <option value="name" {% if request.GET.order == 'name' %}selected{% endif %}>Sort by Name ASC</option>
+                <option value="-name" {% if request.GET.order == '-name' %}selected{% endif %}>Sort by Name DESC</option>
+                <option value="popularity" {% if request.GET.order == 'popularity' %}selected{% endif %}>Sort by Popularity</option>
+            </select>
+            <button type="submit">Apply</button>
+        </form>
+    </section>
+    
+
+    <section>
+        <h2>Available Courses</h2>
+        <ul>
+            {% for course in courses %}
+                <li>
+                    <h3>{{ course.title }}</h3>  
+                    <p>{{ course.description }}</p>
+                    
+                    <form method="POST" action="{% url 'enroll_course' course.id %}">
+                        {% csrf_token %}
+                        <button type="submit">Enroll</button>
+                    </form>
+    
+                    <form method="POST" action="{% url 'unenroll_course' course.id %}">
+                        {% csrf_token %}
+                        <button type="submit">Remove Enrollment</button>
+                    </form>
+                </li>
+            {% empty %}
+                <p>No courses available.</p>
+            {% endfor %}
+        </ul>
+    </section>
+    
+    
+    
+</body>
+</html>

@@ -1,0 +1,36 @@
+<div class="card">
+  <div class="card-header">
+    <h3 class="mb-0">Add New Course</h3>
+  </div>
+
+<div class="card-body">
+<div *ngIf="messages.length" class="message">
+  <div *ngFor="let message of messages">{{ message }}</div>
+</div>
+
+<form (ngSubmit)="submitForm()">
+  <div class="mb-3">
+    <label class="form-label">Course Title <span class="text-danger">*</span></label>
+    <input type="text" [(ngModel)]="course.title" name="title" required />
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Course Code <span class="text-danger">*</span></label>
+    <input type="text" [(ngModel)]="course.code" name="code" required />
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Description</label>
+    <textarea [(ngModel)]="course.description" name="description"></textarea>
+  </div>
+
+  <div class="d-flex justify-content-between mt-4">
+    <button type="submit" class="btn px-4">
+      Save Course
+    </button>
+    <button type="button" (click)="cancel()" class="btn btn-outline-secondary px-4">
+      Cancel
+    </button>
+  </div>
+</form>
+</div>

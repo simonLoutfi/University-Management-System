@@ -1,0 +1,43 @@
+<div class="signup-container">
+  <h2>Professor Signup</h2>
+  <form (ngSubmit)="onSignup()" #signupForm="ngForm">
+    <div>
+      <label for="username">Username</label>
+      <input id="username" [(ngModel)]="username" name="username" required />
+    </div>
+
+    <div>
+      <label for="email">Email</label>
+      <input id="email" type="email" [(ngModel)]="email" name="email" required />
+    </div>
+
+    <div>
+      <label for="password">Password</label>
+      <input id="password" type="password" [(ngModel)]="password" name="password" required />
+    </div>
+
+    <div>
+      <label for="confirmPassword">Confirm Password</label>
+      <input id="confirmPassword" type="password" [(ngModel)]="confirmPassword" name="confirmPassword" required />
+    </div>
+
+    <div>
+      <label for="name">Full Name</label>
+      <input id="name" type="text" [(ngModel)]="name" name="name" required />
+    </div>
+
+    <div>
+      <label for="department">Department</label>
+      <input id="department" type="text" [(ngModel)]="department" name="department" required />
+    </div>
+
+    <div>
+      <label for="file">Profile Picture (Optional)</label>
+      <input id="file" type="file" (change)="onFileChange($event)" />
+    </div>
+
+    <button type="submit">Sign Up</button>
+
+    <div class="error" *ngIf="errorMessage">{{ errorMessage }}</div>
+  </form>
+</div>

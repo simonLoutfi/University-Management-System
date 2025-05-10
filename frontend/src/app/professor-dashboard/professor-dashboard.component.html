@@ -1,0 +1,110 @@
+<div class="container">
+  <section>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div style="display: flex; align-items: center;">
+        <img *ngIf="profilePictureUrl; else placeholder"
+             [src]="profilePictureUrl"
+             style="width: 80px; height: 80px; border-radius: 50%; margin-right: 20px;" alt="Profile Picture">
+        <ng-template #placeholder>
+          <div style="width: 80px; height: 80px; border-radius: 50%; background: #5c67f2; color: white;
+                      display: flex; align-items: center; justify-content: center; margin-right: 20px;">
+            <i class="bi bi-person-fill" style="font-size: 2rem;"></i>
+          </div>
+        </ng-template>
+        <div>
+          <h2>Welcome, {{ professorName }}</h2>
+          <p><i class="bi bi-building"></i> {{ department }}</p>
+        </div>
+      </div>
+      <button (click)="logout()" style="background: #dc3545; padding: 8px 15px;">
+        <i class="bi bi-box-arrow-right"></i> Logout
+      </button>
+    </div>
+  </section>
+
+  <section>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <h2><i class="bi bi-journal-bookmark"></i> Your Courses</h2>
+      <div class="dropdown me-2">
+        <button class="btn btn-outline-primary dropdown-toggle" type="button">
+          <i class="bi bi-sort-down me-1"></i> {{ sortBy | titlecase }}
+          <span class="badge bg-primary ms-1">{{ sortOrder.toUpperCase() }}</span>
+        </button>
+        <ul class="dropdown-menu shadow">
+          <li><a class="dropdown-item" (click)="sortCourses('title')">Title</a></li>
+          <li><a class="dropdown-item" (click)="sortCourses('code')">Code</a></li>
+        </ul>
+      </div>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" (click)="sortCourses('title')">Title <span [ngClass]="{'badge': true, 'badge-primary': sortBy === 'title', 'badge-success': sortBy === 'title' && sortOrder === 'asc', 'badge-danger': sortBy === 'title' && sortOrder === 'desc'}">{{ sortBy === 'title' ? (sortOrder === 'asc' ? 'ASC' : 'DESC') : '' }}</span></a>
+        <a class="dropdown-item" (click)="sortCourses('code')">Code <span [ngClass]="{'badge': true, 'badge-primary': sortBy === 'code', 'badge-success': sortBy === 'code' && sortOrder === 'asc', 'badge-danger': sortBy === 'code' && sortOrder === 'desc'}">{{ sortBy === 'code' ? (sortOrder === 'asc' ? 'ASC' : 'DESC') : '' }}</span></a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" (click)="logout()">Logout</a>
+      </div>
+      <a routerLink="/dashboard/professor/add-course" style="background: #5c67f2; color: white; padding: 8px 15px; border-radius: 5px; text-decoration: none;">
+        <i class="bi bi-plus-lg"></i> Add Course
+      </a>
+    </div>
+
+    <form style="margin-bottom: 20px;">
+      <!-- VALID EXAMPLE -->
+      <input [(ngModel)]="searchQuery" [ngModelOptions]="{standalone: true}" placeholder="Search students..." />
+
+
+      <button type="submit" style="width: 25%; margin-left: 5%;">
+        <i class="bi bi-search"></i> Search
+      </button>
+    </form>
+  </section>
+
+  <section *ngIf="courses.length > 0">
+    <ul>
+      <li *ngFor="let course of courses">
+        <div style="display: flex; justify-content: space-between;">
+          <div>
+            <h3>{{ course.title }}</h3>
+            <span style="background: #eef; padding: 3px 8px; border-radius: 10px; color: #5c67f2;">
+              {{ course.code }}
+            </span>
+          </div>
+          <span style="background: #eef; padding: 3px 8px; border-radius: 10px;">
+            {{ course.studentsCount }} student{{ course.studentsCount === 1 ? '' : 's' }}
+          </span>
+        </div>
+        <p>{{ course.description }}</p>
+        <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+          <a [routerLink]="['/dashboard/professor/update-course', course.id]" style="background: #eef; color: #5c67f2; padding: 5px 10px; border-radius: 5px;">
+            <i class="bi bi-pencil"></i> Edit
+          </a>
+          <button *ngIf="course.hasStudents" disabled
+                  style="background: #f8d7da; color: #dc3545; padding: 5px 10px; border: none; cursor: not-allowed;">
+            <i class="bi bi-trash"></i> Delete
+          </button>
+          <button *ngIf="!course.hasStudents" (click)="deleteCourse(course.id)"
+                  style="background: #f8d7da; color: #dc3545; padding: 5px 10px; border-radius: 5px;">
+            <i class="bi bi-trash"></i> Delete
+          </button>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <section *ngIf="courses.length === 0">
+    <p>You haven't created any courses yet.</p>
+    <a routerLink="/dashboard/professor/add-course" style="background: #5c67f2; color: white; padding: 10px 20px; border-radius: 5px;">
+      <i class="bi bi-plus-lg"></i> Create Your First Course
+    </a>
+  </section>
+
+  <section *ngIf="students.length > 0">
+    <h2><i class="bi bi-search"></i> Search Results</h2>
+    <ul>
+      <li *ngFor="let student of students">
+        <div>
+          <strong>{{ student.student_id }}</strong> - {{ student.name }}
+          <p><a [href]="'mailto:' + student.email">{{ student.email }}</a></p>
+        </div>
+      </li>
+    </ul>
+  </section>
+</div>

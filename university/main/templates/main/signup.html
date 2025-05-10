@@ -1,0 +1,154 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Sign Up as {{ user_type|title }}{% endblock %}</title>
+    <style>
+        /* General Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        /* Section Styles */
+        .card {
+            background: #fff;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background-color: #5c67f2;
+            color: white;
+            padding: 20px;
+            text-align: left;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-footer {
+            background-color: #f4f4f9;
+            padding: 10px;
+            text-align: center;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .btn {
+            background-color: #5c67f2;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background-color: #4a54e1;
+        }
+
+        /* Form Styling */
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        label {
+            color: #444;
+        }
+
+        /* Error Styling */
+        .error {
+            color: red;
+            font-size: 14px;
+        }
+
+        /* Messages */
+        .message {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background-color: #f8d7da;
+            color: #721c24;
+            text-align: center;
+        }
+
+        /* Links */
+        a {
+            color: #5c67f2;
+            font-weight: bold;
+        }
+
+        a:hover {
+            color: #4a54e1;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="card-header">
+            <h2>
+                <i class="bi bi-person-plus mr-2"></i> Sign Up as {{ user_type|title }}
+            </h2>
+        </div>
+
+        <div class="card-body">
+            {% if messages %}
+            <div class="message">
+                {% for message in messages %}
+                <div>{{ message }}</div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                {% for field in form %}
+                <div>
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                    <p class="error">{% for error in field.errors %}{{ error }}{% endfor %}</p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+
+                <button type="submit" class="btn">
+                    <i class="bi bi-person-plus mr-2"></i> Complete Signup
+                </button>
+            </form>
+        </div>
+
+        <div class="card-footer">
+            <p class="text-gray-600">Already have an account? 
+                <a href="{% url 'login' %}">Login here</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

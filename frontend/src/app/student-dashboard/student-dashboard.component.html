@@ -1,0 +1,73 @@
+<div class="dashboard-container">
+  <!-- Student Information -->
+  <div class="student-info">
+    <h2>Welcome, {{ studentName }}</h2>
+    <p>Student ID: {{ studentId }}</p>
+    <p>Email: {{ email }}</p>
+    <div class="pdf-link">
+  <button (click)="getPdfLink()">
+     View PDF
+  </button>
+</div>
+
+  </div>
+
+  <!-- Enrolled Courses Section -->
+  <div class="courses-section">
+    <h2>Enrolled Courses</h2>
+    <div class="courses-grid" *ngIf="enrolled_courses.length > 0">
+      <div class="course-card" *ngFor="let course of enrolled_courses">
+        <h3>{{ course.title }}</h3>
+        <p><strong>Code:</strong> {{ course.code }}</p>
+        <p><strong>Professor:</strong> {{ course.professor__name }}</p>
+        <p>{{ course.description }}</p>
+        <div *ngIf="course.pdf_url" class="pdf-link">
+          <a [href]="course.pdf_url" target="_blank">View PDF</a>
+        </div>
+        <button (click)="unenrollCourse(course.id)">Unenroll</button>
+      </div>
+    </div>
+    <div class="no-courses" *ngIf="enrolled_courses.length === 0">
+      <p>No enrolled courses yet</p>
+    </div>
+  </div>
+<div class="search-sort-container">
+  <input 
+    type="text" 
+    placeholder="Search courses..." 
+    [(ngModel)]="searchQuery" 
+    (input)="searchAndSortCourses()" 
+  />
+
+  <select [(ngModel)]="sortField" (change)="searchAndSortCourses()">
+    <option value="title">Title</option>
+    <option value="code">Code</option>
+    <option value="professor__name">Professor</option>
+  </select>
+
+  <button (click)="toggleSortOrder()">
+    Sort {{ sortOrder === 'asc' ? '⬆️ Ascending' : '⬇️ Descending' }}
+  </button>
+</div>
+
+
+  <!-- Available Courses Section -->
+  <div class="courses-section">
+    <h2>Available Courses</h2>
+    <div class="courses-grid" *ngIf="available_courses.length > 0">
+      <div class="course-card" *ngFor="let course of available_courses">
+        <h3>{{ course.title }}</h3>
+        <p><strong>Code:</strong> {{ course.code }}</p>
+        <p><strong>Professor:</strong> {{ course.professor__name }}</p>
+        <p>{{ course.description }}</p>
+        <div *ngIf="course.pdf_url" class="pdf-link">
+          <a [href]="course.pdf_url" target="_blank">View PDF</a>
+        </div>
+        <button (click)="enrollCourse(course.id)">Enroll</button>
+      </div>
+    </div>
+    <div class="no-courses" *ngIf="available_courses.length === 0">
+      <p>No available courses</p>
+    </div>
+  </div>
+</div>

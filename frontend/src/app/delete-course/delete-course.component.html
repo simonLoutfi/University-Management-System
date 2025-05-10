@@ -1,0 +1,18 @@
+<div *ngIf="course as c; else noCourse">
+  <div *ngIf="c.studentsCount > 0; else deleteForm">
+    <p>
+      The course <strong>"{{ c.title }}"</strong> has {{ c.studentsCount }} enrolled student(s).
+    </p>
+  </div>
+
+  <ng-template #deleteForm>
+    <p>Are you sure you want to delete the course <strong>"{{ c.title }}"</strong>?</p>
+    <p><small>Course Code: {{ c.code }}</small></p>
+    <button (click)="onDelete()">Delete</button>
+    <button (click)="cancel()">Cancel</button>
+  </ng-template>
+</div>
+
+<ng-template #noCourse>
+  <p>No course data available.</p>
+</ng-template>

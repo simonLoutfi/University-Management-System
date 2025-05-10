@@ -1,0 +1,42 @@
+<div class="container">
+    <section>
+      <h1><i class="bi bi-person-plus"></i> Create Your Account</h1>
+      <p class="lead">Select your account type to get started</p>
+  
+      <div class="row" style="display: flex; justify-content: center; gap: 20px;">
+        <div style="width: 45%; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); text-align: center;">
+          <div style="margin-bottom: 15px;">
+            <i class="bi bi-mortarboard-fill" style="font-size: 2rem; color: #5c67f2;"></i>
+          </div>
+          <h3 class="h5">Professor</h3>
+          <p class="text-muted">For faculty members teaching courses</p>
+          <a [routerLink]="['/signup/professor']"
+          style="display: inline-block; background-color: #5c67f2; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold;">
+          Select <i class="bi bi-arrow-right"></i>
+       </a>
+       
+        </div>
+  
+        <div style="width: 45%; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); text-align: center;">
+          <div style="margin-bottom: 15px;">
+            <i class="bi bi-backpack-fill" style="font-size: 2rem; color: #17a2b8;"></i>
+          </div>
+          <h3 class="h5">Student</h3>
+          <p class="text-muted">For students enrolling in courses</p>
+          <a [routerLink]="['/signup/student']"
+             class="btn"
+             style="background-color: #17a2b8; color: white; font-weight: bold;">
+            Select <i class="bi bi-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+  
+      <p style="margin-top: 20px;">
+        Already have an account?
+        <a [routerLink]="['/login']" style="color: #5c67f2; text-decoration: none; font-weight: bold;">
+          Login here <i class="bi bi-box-arrow-in-right"></i>
+        </a>
+      </p>
+    </section>
+  </div>
+  

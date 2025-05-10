@@ -1,0 +1,229 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Update Course - {{ course.title }}{% endblock %}</title>
+    <style>
+        /* General Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        /* Section Styles */
+        .card {
+            background: #fff;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background-color: #5c67f2;
+            color: white;
+            padding: 20px;
+            text-align: left;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-footer {
+            background-color: #f4f4f9;
+            padding: 10px;
+            text-align: center;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .btn {
+            background-color: #5c67f2;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            text-decoration: none;
+            border: none;
+            font-size: 16px;
+        }
+
+        .btn:hover {
+            background-color: #4a54e1;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid #5c67f2;
+            color: #5c67f2;
+        }
+
+        .btn-outline:hover {
+            background-color: #f4f4f9;
+        }
+
+        /* Form Styling */
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            flex: 1;
+            min-width: 250px;
+            text-align: left;
+        }
+
+        input, select, textarea, button {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            min-height: 120px;
+        }
+
+        label {
+            color: #444;
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        /* Error Styling */
+        .error, .invalid-feedback {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        /* Messages */
+        .message, .alert {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background-color: #f8d7da;
+            color: #721c24;
+            text-align: center;
+        }
+
+        /* Links */
+        a {
+            color: #5c67f2;
+            font-weight: bold;
+        }
+
+        a:hover {
+            color: #4a54e1;
+        }
+
+        .badge {
+            background-color: white;
+            color: #5c67f2;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="card-header">
+            <h2>
+                <i class="bi bi-pencil-square mr-2"></i> Update Course
+            </h2>
+            <span class="badge">{{ course.code }}</span>
+        </div>
+        <div class="card-body">
+            {% if form.non_field_errors %}
+            <div class="alert">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-exclamation-octagon-fill me-2"></i>
+                    <div>{{ form.non_field_errors }}</div>
+                </div>
+            </div>
+            {% endif %}
+
+            <form method="post" novalidate>
+                {% csrf_token %}
+                
+                <div class="form-row">
+                    {% for field in form %}
+                    <div class="form-group">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                        
+                        {% if field.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in field.errors %}{{ error }}{% endfor %}
+                        </div>
+                        {% endif %}
+                        
+                        {% if field.help_text %}
+                        <small class="form-text text-muted">{{ field.help_text }}</small>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="form-actions">
+                    <a href="{% url 'professor_dashboard' %}" class="btn btn-outline">
+                        <i class="bi bi-arrow-left mr-2"></i>Cancel
+                    </a>
+                    <button type="submit" class="btn">
+                        <i class="bi bi-save mr-2"></i>Update Course
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('input, select, textarea').forEach(input => {
+            input.addEventListener('blur', function() {
+                if (this.value.trim() === '' && this.required) {
+                    this.classList.add('is-invalid');
+                } else {
+                    this.classList.remove('is-invalid');
+                }
+            });
+        });
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,125 @@
+{% block title %}University Login{% endblock %}
+
+{% block content %}
+<div class="container">
+    <section>
+        <h1><i class="bi bi-person-circle"></i> University Login</h1>
+        
+        {% if profile_picture %}
+        <div style="text-align: center; margin-bottom: 20px;">
+            <img src="{{ profile_picture.url }}" 
+                 style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid #ddd;"
+                 alt="Profile Picture">
+        </div>
+        {% endif %}
+        
+        <form method="post">
+            {% csrf_token %}
+            
+            <div style="width: 80%; margin: 0 auto 15px;">
+                <label for="id_username" style="display: block; text-align: left; margin-bottom: 5px;">Username</label>
+                <input type="text" 
+                       name="username" 
+                       id="id_username" 
+                       placeholder="Username"
+                       value="{{ initial_username }}"
+                       required 
+                       autofocus>
+                {% if form.username.errors %}
+                    <div style="color: #dc3545; margin-top: 5px; text-align: left;">
+                        {{ form.username.errors.0 }}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div style="width: 80%; margin: 0 auto 15px;">
+                <label for="id_password" style="display: block; text-align: left; margin-bottom: 5px;">Password</label>
+                <input type="password" 
+                       name="password" 
+                       id="id_password" 
+                       placeholder="Password"
+                       required>
+                {% if form.password.errors %}
+                    <div style="color: #dc3545; margin-top: 5px; text-align: left;">
+                        {{ form.password.errors.0 }}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <button type="submit" style="width: 80%; margin: 15px 0;">
+                <i class="bi bi-box-arrow-in-right"></i> Login
+            </button>
+
+        </form>
+    </section>
+    
+    <section>
+        <p>Don't have an account? 
+            <a href="{% url 'signup' %}" style="color: #5c67f2; text-decoration: none; font-weight: bold;">Sign up</a>
+        </p>
+    </section>
+</div>
+{% endblock %}
+
+<style>
+    /* Core Styling (from student_dashboard.html) */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+}
+
+h1, h2, h3 {
+    color: #333;
+}
+
+section {
+    background: #fff;
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+input, select, button {
+    width: 80%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+button {
+    background-color: #5c67f2;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+}
+
+button:hover {
+    background-color: #4a54e1;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    background: #eef;
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 5px;
+    text-align: left;
+}
+</style>

@@ -1,0 +1,207 @@
+{% block title %}Professor Dashboard{% endblock %}
+
+{% block content %}
+<div class="container">
+    <section>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; align-items: center;">
+                {% if profile_picture_url %}
+                <img src="{{ profile_picture_url }}" 
+                     style="width: 80px; height: 80px; border-radius: 50%; margin-right: 20px;"
+                     alt="Profile Picture">
+                {% else %}
+                <div style="width: 80px; height: 80px; border-radius: 50%; background: #5c67f2; color: white; 
+                     display: flex; align-items: center; justify-content: center; margin-right: 20px;">
+                    <i class="bi bi-person-fill" style="font-size: 2rem;"></i>
+                </div>
+                {% endif %}
+                <div>
+                    <h2>Welcome, {{ request.user.professor_profile.name }}</h2>
+                    <p>
+                        <i class="bi bi-building"></i> {{ request.user.professor_profile.department }}
+                    </p>
+                </div>
+            </div>
+            <form action="{% url 'logout' %}" method="POST" style="margin: 0;">
+                {% csrf_token %}
+                <button type="submit" style="background: #dc3545; width: auto; padding: 8px 15px;">
+                    <i class="bi bi-box-arrow-right"></i> Logout
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <section>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2><i class="bi bi-journal-bookmark"></i> Your Courses</h2>
+            <div class="dropdown me-2">
+                <button class="sort-dropdown btn btn-outline-primary dropdown-toggle" type="button" 
+                        id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-sort-down me-1"></i>
+                    {% if sort_by == 'title' %}Title{% elif sort_by == 'code' %}Code{% else %}Date{% endif %} 
+                    <span class="sort-badge badge bg-primary ms-1">{{ sort_order|upper }}</span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="sortDropdown">
+                    <li><a class="dropdown-item d-flex justify-content-between align-items-center" 
+                          href="?sort_by=title&sort_order={{ next_sort_order }}">
+                        Title
+                        {% if sort_by == 'title' %}
+                        <i class="bi bi-check2 text-primary"></i>
+                        {% endif %}
+                    </a></li>
+                    <li><a class="dropdown-item d-flex justify-content-between align-items-center" 
+                          href="?sort_by=code&sort_order={{ next_sort_order }}">
+                        Code
+                        {% if sort_by == 'code' %}
+                        <i class="bi bi-check2 text-primary"></i>
+                        {% endif %}
+                    </a></li>
+                </ul>
+            </div>
+            <a href="{% url 'add_course' %}" style="background: #5c67f2; color: white; 
+               padding: 8px 15px; border-radius: 5px; text-decoration: none;">
+                <i class="bi bi-plus-lg"></i> Add Course
+            </a>
+        </div>
+        
+        <form method="get" style="margin-bottom: 20px;">
+            <input type="text" name="search" placeholder="Search students..." 
+                   value="{{ search_query }}" style="width: 70%;">
+            <button type="submit" style="width: 25%; margin-left: 5%;">
+                <i class="bi bi-search"></i> Search
+            </button>
+        </form>
+    </section>
+
+    {% if courses %}
+    <section>
+        <ul>
+            {% for course in courses %}
+            <li>
+                <div style="display: flex; justify-content: space-between;">
+                    <div>
+                        <h3>{{ course.title }}</h3>
+                        <span style="background: #eef; padding: 3px 8px; border-radius: 10px; 
+                              font-size: 0.9em; color: #5c67f2;">
+                            {{ course.code }}
+                        </span>
+                    </div>
+                    <span style="background: #eef; padding: 3px 8px; border-radius: 10px; 
+                          font-size: 0.9em;">
+                        {{ course.students.count }} student{{ course.students.count|pluralize }}
+                    </span>
+                </div>
+                <p>{{ course.description|truncatechars:120 }}</p>
+                <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+                    <a href="{% url 'update_course' course.pk %}" 
+                       style="background: #eef; color: #5c67f2; padding: 5px 10px; 
+                       border-radius: 5px; text-decoration: none;">
+                        <i class="bi bi-pencil"></i> Edit
+                    </a>
+                    {% if course.students.exists %}
+                    <button disabled style="background: #f8d7da; color: #dc3545; 
+                            padding: 5px 10px; border-radius: 5px; border: none; cursor: not-allowed;">
+                        <i class="bi bi-trash"></i> Delete
+                    </button>
+                    {% else %}
+                    <a href="{% url 'delete_course' course.pk %}" 
+                       style="background: #f8d7da; color: #dc3545; padding: 5px 10px; 
+                       border-radius: 5px; text-decoration: none;">
+                        <i class="bi bi-trash"></i> Delete
+                    </a>
+                    {% endif %}
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </section>
+    {% else %}
+    <section>
+        <p>You haven't created any courses yet.</p>
+        <a href="{% url 'add_course' %}" style="background: #5c67f2; color: white; 
+           padding: 10px 20px; border-radius: 5px; text-decoration: none; display: inline-block;">
+            <i class="bi bi-plus-lg"></i> Create Your First Course
+        </a>
+    </section>
+    {% endif %}
+
+    {% if students %}
+    <section>
+        <h2><i class="bi bi-search"></i> Search Results</h2>
+        <ul>
+            {% for student in students %}
+            <li>
+                <div>
+                    <strong>{{ student.student_id }}</strong> - {{ student.name }}
+                    <p><a href="mailto:{{ student.email }}">{{ student.email }}</a></p>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </section>
+    {% endif %}
+</div>
+{% endblock %}
+
+<style>
+    /* Core Styling (from student_dashboard.html) */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+}
+
+h1, h2, h3 {
+    color: #333;
+}
+
+section {
+    background: #fff;
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+input, select, button {
+    width: 80%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+button {
+    background-color: #5c67f2;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+}
+
+button:hover {
+    background-color: #4a54e1;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    background: #eef;
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 5px;
+    text-align: left;
+}
+</style>

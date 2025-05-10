@@ -1,0 +1,5 @@
+{% for professor in professors %}
+    <p>{{ professor.name }} - {{ professor.email }}</p>
+    <a href="{% url 'update_professor' professor.id %}">Edit</a> |
+    <a href="{% url 'delete_professor' professor.id %}">Delete</a>
+{% endfor %}
