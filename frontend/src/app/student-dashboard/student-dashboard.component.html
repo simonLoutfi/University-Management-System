@@ -4,11 +4,28 @@
     <h2>Welcome, {{ studentName }}</h2>
     <p>Student ID: {{ studentId }}</p>
 
+<!-- ...existing code... -->
+
     <div class="email-update">
       <label for="email">Update Email:</label>
-      <input type="email" [(ngModel)]="email" id="email" placeholder="Enter new email">
-      <button (click)="updateEmail()">Update Email</button>
+      <input 
+        type="email" 
+        [(ngModel)]="email" 
+        id="email" 
+        placeholder="Enter new email"
+        pattern="[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}"
+        required
+      >
+<button 
+  (click)="updateEmail()" 
+  [disabled]="!isEmailValid"
+>
+  Update Email
+</button>
+      <div class="error-message" *ngIf="error">{{ error }}</div>
     </div>
+
+<!-- ...existing code... -->
 
     <div class="pdf-link">
       <button (click)="getPdfLink()">

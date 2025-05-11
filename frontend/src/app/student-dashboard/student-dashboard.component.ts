@@ -197,17 +197,61 @@ toggleSortOrder(): void {
     );
   }
 
-  async updateEmail(): Promise<void> {
-    try {
-      const response = await firstValueFrom(this.studentService.updateEmail(this.email));
-      console.log('Email updated successfully', response);
-      this.error = null;
-      alert('Email updated successfully!');
-    } catch (error) {
-      console.error('Failed to update email:', error);
-      this.error = 'Failed to update email. Please try again.';
-    }
+// ...existing code...
+
+async updateEmail(): Promise<void> {
+  if (!this.isEmailValid) {
+    alert('Please enter a valid email address');
+    return;
   }
+
+  try {
+    const response = await firstValueFrom(this.studentService.updateEmail(this.email));
+    
+    // Update local storage
+    const userData = this.platformCheck.getLocalStorage('user');
+    if (userData) {
+      const user = JSON.parse(userData);
+      if (user) {
+        // Update both username and email
+        user.username = this.email;
+        user.email = this.email;
+        if (user.profile || user.student_profile) {
+          const profile = user.profile || user.student_profile;
+          profile.email = this.email;
+        }
+        this.platformCheck.setLocalStorage('user', JSON.stringify(user));
+      }
+    }
+
+    alert('Email and username updated successfully!');
+    this.error = null;
+    
+    // Optional: Reload the dashboard to reflect changes
+    this.loadStudentData();
+    
+  } catch (error: any) {
+    console.error('Failed to update email and username:', error);
+    this.error = error.message || 'Failed to update email and username. Please try again.';
+    alert(this.error);
+  }
+}
+
+// ...existing code...
+
+// Change from private to public
+public isValidEmail(email: string): boolean {
+  const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+  return emailPattern.test(email);
+}
+// ...existing code...
+
+// Add this getter before the constructor
+public get isEmailValid(): boolean {
+  return !!this.email && this.isValidEmail(this.email);
+}
+
+// ...existing code...
 
   async unenrollCourse(courseId: number) {
     if (!confirm('Are you sure you want to unenroll from this course?')) {

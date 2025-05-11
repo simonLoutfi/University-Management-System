@@ -321,21 +321,40 @@ def student_dashboard(request):
 @permission_classes([IsAuthenticated])
 def update_email(request):
     if request.method == "POST":
-        new_email = request.data.get("email")  # Use request.data to get the email
-        if not new_email:
-            return Response({'error': 'Email is required'}, status=status.HTTP_400_BAD_REQUEST)
+        new_email = request.data.get("email")
+        new_username = request.data.get("username")
+        
+        if not new_email or not new_username:
+            return Response({'error': 'Email and username are required'}, 
+                          status=status.HTTP_400_BAD_REQUEST)
         
         try:
-            student = Student.objects.get(user=request.user)
+            # Update CustomUser (username and email)
+            user = request.user
+            user.email = new_email
+            user.username = new_username
+            user.save()
+            
+            # Update Student email
+            student = Student.objects.get(user=user)
             student.email = new_email
             student.save()
-            return Response({'message': 'Email updated successfully!'}, status=status.HTTP_200_OK)
+            
+            return Response({
+                'message': 'Email and username updated successfully!',
+                'email': new_email,
+                'username': new_username
+            }, status=status.HTTP_200_OK)
+            
         except Student.DoesNotExist:
-            return Response({'error': 'Student not found'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'Student not found'}, 
+                          status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({'error': str(e)}, 
+                          status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    return Response({'error': 'Invalid request method'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+    return Response({'error': 'Invalid request method'}, 
+                   status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
 # def student_dashboard(request):

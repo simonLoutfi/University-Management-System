@@ -62,15 +62,30 @@ private getHeaders(): HttpHeaders {
     );
   }
 
-  updateEmail(email: string): Observable<any> {
-    const headers = this.getHeaders();
-    return this.http.post(`${this.apiUrl}/update-email/`, { email }, { headers }).pipe(
-      catchError(error => {
-        console.error('Error updating email:', error);
-        return throwError(() => new Error('Failed to update email.'));
-      })
-    );
-  }
+
+// ...existing code...
+
+updateEmail(email: string): Observable<any> {
+  const headers = this.getHeaders();
+  const payload = { 
+    email: email,
+    username: email  // Add username to payload
+  };
+  
+  return this.http.post(
+    `${this.apiUrl}/update-email/`, 
+    payload, 
+    { headers }
+  ).pipe(
+    catchError(error => {
+      console.error('Error updating email:', error);
+      return throwError(() => error.error?.error || 'Failed to update email and username.');
+    })
+  );
+}
+
+// ...existing code...
+
 
   enrollCourse(courseId: number): Observable<any> {
     const headers = this.getHeaders();
