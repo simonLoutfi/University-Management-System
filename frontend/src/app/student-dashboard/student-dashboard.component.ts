@@ -52,29 +52,33 @@ sortField: 'title' | 'code' | 'professor__name' = 'title';
     this.loadCourses();
   }
 
-  async loadStudentData() {
-    try {
-      if (typeof window !== 'undefined') {
-        const userData = localStorage.getItem('user');
-        if (userData) {
-          try {
-            const user = JSON.parse(userData);
-            if (user.student_profile) {
-              this.studentName = user.student_profile.name;
-              this.studentId = user.student_profile.student_id;
-              this.email = user.student_profile.email;
-            }
-          } catch (parseError) {
-            console.error('Error parsing user data:', parseError);
-            this.error = 'Failed to parse user data';
+async loadStudentData() {
+  try {
+    if (typeof window !== 'undefined') {
+      const userData = localStorage.getItem('user');
+      if (userData) {
+        try {
+          const user = JSON.parse(userData);
+          console.log('User data:', user); // Debugging line
+
+          const profile = user.profile || user.student_profile;
+
+          if (profile) {
+            this.studentName = profile.name || '';
+            this.studentId = profile.student_id || '';
           }
+        } catch (parseError) {
+          console.error('Error parsing user data:', parseError);
+          this.error = 'Failed to parse user data';
         }
       }
-    } catch (error) {
-      console.error('Error loading student data:', error);
-      this.error = 'Failed to load student data';
     }
+  } catch (error) {
+    console.error('Error loading student data:', error);
+    this.error = 'Failed to load student data';
   }
+}
+
 
   async loadCourses() {
   try {
@@ -97,12 +101,34 @@ sortField: 'title' | 'code' | 'professor__name' = 'title';
 }
 
 searchAndSortCourses(): void {
-  // Filter and sort enrolled courses
-  this.enrolled_courses = this.filterAndSortCourses(this.originalEnrolledCourses);
+  const query = this.searchQuery.trim().toLowerCase();
 
-  // Filter and sort available courses
-  this.available_courses = this.filterAndSortCourses(this.available_courses);
+  // Apply filter and sort to enrolled courses
+  let filteredEnrolledCourses = query ? this.filterCourses(this.originalEnrolledCourses, query) : [...this.originalEnrolledCourses];
+  this.enrolled_courses = this.sortCourses(filteredEnrolledCourses);
+
+  // Apply filter and sort to available courses
+  let filteredAvailableCourses = query ? this.filterCourses(this.available_courses, query) : [...this.available_courses];
+  this.available_courses = this.sortCourses(filteredAvailableCourses);
 }
+
+
+private filterCourses(courses: any[], query: string): any[] {
+  return courses.filter(course =>
+    course.title.toLowerCase().includes(query) ||
+    course.code.toLowerCase().includes(query) 
+  );
+}
+
+private sortCourses(courses: any[]): any[] {
+  return courses.sort((a, b) => {
+    const valueA = a[this.sortField]?.toString().toLowerCase() || '';
+    const valueB = b[this.sortField]?.toString().toLowerCase() || '';
+
+    return this.sortOrder === 'asc' ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
+  });
+}
+
 
 private filterAndSortCourses(courses: any[]): any[] {
   let filteredCourses = [...courses];
@@ -133,6 +159,7 @@ toggleSortOrder(): void {
   this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
   this.searchAndSortCourses();
 }
+
   async enrollCourse(courseId: number) {
     try {
       await firstValueFrom(this.studentService.enrollCourse(courseId));
@@ -144,19 +171,19 @@ toggleSortOrder(): void {
     }
   }
 
-  sortCourses() {
-    this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
-    this.enrolled_courses.sort((a: any, b: any) => {
-      const valueA = a[this.sortBy].toString().toLowerCase();
-      const valueB = b[this.sortBy].toString().toLowerCase();
+  // sortCourses() {
+  //   this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
+  //   this.enrolled_courses.sort((a: any, b: any) => {
+  //     const valueA = a[this.sortBy].toString().toLowerCase();
+  //     const valueB = b[this.sortBy].toString().toLowerCase();
       
-      if (this.sortOrder === 'asc') {
-        return valueA.localeCompare(valueB);
-      } else {
-        return valueB.localeCompare(valueA);
-      }
-    });
-  }
+  //     if (this.sortOrder === 'asc') {
+  //       return valueA.localeCompare(valueB);
+  //     } else {
+  //       return valueB.localeCompare(valueA);
+  //     }
+  //   });
+  // }
 
   searchCourses() {
     if (!this.searchQuery) {
