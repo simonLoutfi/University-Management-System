@@ -23,27 +23,46 @@ export class ProfessorSignupComponent {
 
   constructor(private authService: AuthService, private router: Router) {}
 
+// ...existing code...
   onSignup(): void {
+    if (this.password !== this.confirmPassword) {
+      this.errorMessage = 'Passwords do not match!';
+      return;
+    }
+
     const formData = new FormData();
-    formData.append('username', this.email); // Using email as username, can be changed as needed
+    formData.append('username', this.email); // Using email as username
     formData.append('password', this.password);
-    formData.append('name', this.name); // Added name field
+    formData.append('name', this.name);
     formData.append('email', this.email);
-    formData.append('department', this.department); // Added department field
+    formData.append('department', this.department);
     if (this.profilePicture) {
-      formData.append('profile_picture', this.profilePicture, this.profilePicture.name); // Ensure file is appended correctly
+      formData.append('profile_picture', this.profilePicture, this.profilePicture.name);
     }
 
     this.authService.professorSignup(formData).subscribe(
       (response) => {
-        console.log('Signup successful:', response);
-        this.router.navigate(['/dashboard/professor']); // Redirect to dashboard on success
+        // After successful signup, login automatically
+        const loginData = {
+          username: this.email,
+          password: this.password
+        };
+        
+        this.authService.login(loginData.username, loginData.password).subscribe(
+          (loginResponse) => {
+            console.log('Login successful:', loginResponse);
+            this.router.navigate(['/dashboard/professor']);
+          },
+          (loginError) => {
+            console.error('Auto-login failed:', loginError);
+            this.router.navigate(['/login']);
+          }
+        );
       },
       (error) => {
         console.error('Signup failed:', error);
         this.errorMessage = error.error ? JSON.stringify(error.error) : 'An unknown error occurred during signup.';
       }
-      
     );
   }
 

@@ -22,6 +22,7 @@ export class StudentSignupComponent {
 
   constructor(private authService: AuthService, private router: Router) {}
 
+// ...existing code...
 onSignup(): void {
   if (this.password !== this.confirmPassword) {
     this.errorMessage = 'Passwords do not match!';
@@ -29,7 +30,7 @@ onSignup(): void {
   }
 
   const formData = new FormData();
-  formData.append('username', this.email); // Use email as username
+  formData.append('username', this.email);
   formData.append('password', this.password);
   formData.append('name', this.name);
   formData.append('email', this.email);
@@ -40,8 +41,22 @@ onSignup(): void {
 
   this.authService.studentSignup(formData).subscribe(
     (response) => {
-      console.log('Signup successful:', response);
-      this.router.navigate(['/dashboard/student']);
+      // After successful signup, login automatically
+      const loginData = {
+        username: this.email,
+        password: this.password
+      };
+      
+      this.authService.login(loginData.username, loginData.password).subscribe(
+        (loginResponse) => {
+          console.log('Login successful:', loginResponse);
+          this.router.navigate(['/dashboard/student']);
+        },
+        (loginError) => {
+          console.error('Auto-login failed:', loginError);
+          this.router.navigate(['/login']);
+        }
+      );
     },
     (error) => {
       console.error('Signup failed:', error);
