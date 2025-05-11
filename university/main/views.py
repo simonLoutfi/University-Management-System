@@ -320,17 +320,22 @@ def student_dashboard(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def update_email(request):
-    courses = Course.objects.all()  
     if request.method == "POST":
-        new_email = request.POST.get("email")
-        student = Student.objects.get(user=request.user)  
-        student.email = new_email
-        student.save()
-        messages.success(request, "Email updated successfully!")
-        return redirect("student_dashboard")
+        new_email = request.data.get("email")  # Use request.data to get the email
+        if not new_email:
+            return Response({'error': 'Email is required'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            student = Student.objects.get(user=request.user)
+            student.email = new_email
+            student.save()
+            return Response({'message': 'Email updated successfully!'}, status=status.HTTP_200_OK)
+        except Student.DoesNotExist:
+            return Response({'error': 'Student not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
-    return redirect("student_dashboard")
+    return Response({'error': 'Invalid request method'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
 # def student_dashboard(request):
@@ -354,3 +359,25 @@ def update_email(request):
 @permission_classes([AllowAny])
 def api_professor_signup(request):
     return professor_signup(request)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def search_students(request):
+    search_query = request.query_params.get('search', '')
+    if not search_query:
+        return Response([])
+        
+    students = Student.objects.filter(
+        Q(name__icontains=search_query) |
+        Q(email__icontains=search_query) |
+        Q(student_id__icontains=search_query)
+    )[:10]  # Limit to 10 results
+    
+    data = [{
+        'student_id': student.student_id,
+        'name': student.name,
+        'email': student.email
+    } for student in students]
+    
+    return Response(data)

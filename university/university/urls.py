@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from main.views import unenroll_course, enroll_course, update_email, student_dashboard, add_professor, list_professors, update_professor, delete_professor, login_user, logout_user,home,     professor_signup,student_signup,signup, professor_dashboard, add_course, update_course, delete_course, professor_courses_api
+from main.views import search_students, unenroll_course, enroll_course, update_email, student_dashboard, add_professor, list_professors, update_professor, delete_professor, login_user, logout_user,home,     professor_signup,student_signup,signup, professor_dashboard, add_course, update_course, delete_course, professor_courses_api
 from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
@@ -45,7 +45,8 @@ urlpatterns = [
     path('enroll/<int:course_id>/', enroll_course, name='enroll_course'),
     path('unenroll/<int:course_id>/', unenroll_course, name='unenroll_course'),
     path('api/signup/professor/', professor_signup, name='api_professor_signup'),
-
+# Add to your urls.py
+path('api/professor/students/search/', search_students, name='search_students'),
 ]
 
 if settings.DEBUG:

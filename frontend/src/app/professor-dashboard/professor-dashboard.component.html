@@ -46,15 +46,12 @@
       </a>
     </div>
 
-    <form style="margin-bottom: 20px;">
-      <!-- VALID EXAMPLE -->
-      <input [(ngModel)]="searchQuery" [ngModelOptions]="{standalone: true}" placeholder="Search students..." />
+    
+
+<app-student-search></app-student-search>
 
 
-      <button type="submit" style="width: 25%; margin-left: 5%;">
-        <i class="bi bi-search"></i> Search
-      </button>
-    </form>
+    
   </section>
 
   <section *ngIf="courses.length > 0">

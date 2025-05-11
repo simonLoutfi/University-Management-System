@@ -157,4 +157,17 @@ export class CourseService {
     console.error('API Error:', error);
     return throwError(error);
   }
+
+searchStudents(query: string): Observable<any> {
+  const params = new HttpParams().set('search', query);
+  return this.http.get(
+    `${this.apiUrl}/api/professor/students/search/`,
+    { 
+      headers: this.getHeaders(),
+      params: params
+    }
+  ).pipe(
+    catchError(this.handleError)
+  );
+}
 }

@@ -7,11 +7,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { CourseService } from '../services/course.service';
 import { StudentService } from '../services/student.service';
 import { AuthService } from '../services/auth.service';
+import { StudentSearchComponent } from '../student-search/student-search.component';
 
 @Component({
   selector: 'app-professor-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, HttpClientModule],
+  imports: [CommonModule, FormsModule, RouterModule, HttpClientModule, StudentSearchComponent],
   templateUrl: './professor-dashboard.component.html',
   styleUrls: ['./professor-dashboard.component.css']
 })

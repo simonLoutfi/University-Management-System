@@ -197,12 +197,15 @@ toggleSortOrder(): void {
     );
   }
 
-  async updateEmail() {
+  async updateEmail(): Promise<void> {
     try {
-      await this.studentService.updateEmail(this.email);
+      const response = await firstValueFrom(this.studentService.updateEmail(this.email));
+      console.log('Email updated successfully', response);
       this.error = null;
+      alert('Email updated successfully!');
     } catch (error) {
-      this.error = 'Failed to update email';
+      console.error('Failed to update email:', error);
+      this.error = 'Failed to update email. Please try again.';
     }
   }
 

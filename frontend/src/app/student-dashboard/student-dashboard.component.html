@@ -3,12 +3,18 @@
   <div class="student-info">
     <h2>Welcome, {{ studentName }}</h2>
     <p>Student ID: {{ studentId }}</p>
-    <div class="pdf-link">
-  <button (click)="getPdfLink()">
-     View PDF
-  </button>
-</div>
 
+    <div class="email-update">
+      <label for="email">Update Email:</label>
+      <input type="email" [(ngModel)]="email" id="email" placeholder="Enter new email">
+      <button (click)="updateEmail()">Update Email</button>
+    </div>
+
+    <div class="pdf-link">
+      <button (click)="getPdfLink()">
+         View PDF
+      </button>
+    </div>
   </div>
 
   <!-- Enrolled Courses Section -->
@@ -29,7 +35,7 @@
       <p>No enrolled courses yet</p>
     </div>
   </div>
-<div class="search-sort-container">
+  <div class="search-sort-container">
   <input 
     type="text" 
     placeholder="Search courses..." 
@@ -40,6 +46,7 @@
   <select [(ngModel)]="sortField" (change)="searchAndSortCourses()">
     <option value="title">Title</option>
     <option value="code">Code</option>
+    <option value="professor__name">Professor</option>
   </select>
 
   <button (click)="toggleSortOrder()">
@@ -55,6 +62,7 @@
       <div class="course-card" *ngFor="let course of available_courses">
         <h3>{{ course.title }}</h3>
         <p><strong>Code:</strong> {{ course.code }}</p>
+        <p><strong>Professor:</strong> {{ course.professor__name }}</p>
         <p>{{ course.description }}</p>
         <div *ngIf="course.pdf_url" class="pdf-link">
           <a [href]="course.pdf_url" target="_blank">View PDF</a>

@@ -64,12 +64,11 @@ private getHeaders(): HttpHeaders {
 
   updateEmail(email: string): Observable<any> {
     const headers = this.getHeaders();
-    return this.http.post(
-      `${this.apiUrl}/update-email/`,
-      { email },
-      { headers }
-    ).pipe(
-      catchError(this.handleError)
+    return this.http.post(`${this.apiUrl}/update-email/`, { email }, { headers }).pipe(
+      catchError(error => {
+        console.error('Error updating email:', error);
+        return throwError(() => new Error('Failed to update email.'));
+      })
     );
   }
 
