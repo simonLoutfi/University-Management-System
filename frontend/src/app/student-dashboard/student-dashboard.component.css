@@ -1,92 +1,225 @@
+/* General Layout */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f2f4f8;
+}
+
 .dashboard-container {
-  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
   max-width: 1200px;
-  margin: 0 auto;
+  margin: auto;
+  width: 100%;
 }
 
+/* Student Info */
 .student-info {
-  background: #f8f9fa;
-  padding: 20px;
-  border-radius: 8px;
-  margin-bottom: 30px;
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  width: 100%;
+  max-width: 600px;
 }
 
+.student-info h2 {
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.student-info p {
+  margin-bottom: 1rem;
+  color: #555;
+}
+
+.email-update {
+  margin-top: 2rem;
+}
+
+.email-update label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #555;
+}
+
+.email-update input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.email-update button {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #007bff;
+  color: white;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.email-update button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.email-update button:hover:enabled {
+  background-color: #0056b3;
+}
+
+.error-message {
+  color: #e74c3c;
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+/* Courses Sections */
 .courses-section {
-  margin-bottom: 40px;
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  width: 100%;
+  max-width: 1200px;
 }
 
 .courses-section h2 {
-  margin-bottom: 20px;
+  margin-bottom: 1rem;
   color: #333;
 }
 
 .courses-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
 }
 
 .course-card {
-  background: white;
-  padding: 20px;
+  background: #f9f9f9;
+  padding: 1rem;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s;
 }
 
 .course-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-10px);
 }
 
 .course-card h3 {
-  margin: 0 0 10px 0;
-  color: #2c3e50;
+  color: #333;
 }
 
 .course-card p {
-  margin: 5px 0;
-  color: #666;
+  color: #555;
 }
 
-.course-card strong {
-  color: #34495e;
+.course-card button {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #007bff;
+  color: white;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-.pdf-link {
-  margin: 10px 0;
-  text-align: center;
+.course-card button:hover {
+  background-color: #0056b3;
 }
 
 .pdf-link a {
   color: #007bff;
   text-decoration: none;
-  font-weight: 500;
-  transition: color 0.2s;
+  font-size: 0.95rem;
 }
 
 .pdf-link a:hover {
-  color: #0056b3;
   text-decoration: underline;
-}
-
-.course-card button {
-  background: #007bff;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 10px;
-  transition: background-color 0.2s;
-}
-
-.course-card button:hover {
-  background: #0056b3;
 }
 
 .no-courses {
   text-align: center;
-  padding: 20px;
-  background: #f8f9fa;
+  font-size: 1.2rem;
+  color: #888;
+}
+
+/* Search and Sort */
+.search-sort-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2rem;
+  width: 100%;
+  max-width: 600px;
+}
+
+.search-sort-container input,
+.search-sort-container select,
+.search-sort-container button {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
   border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.search-sort-container button {
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+.search-sort-container button:hover {
+  background-color: #0056b3;
+}
+/* PDF Link Button */
+.pdf-link button {
+  width: auto; /* Adjusts width to content */
+  padding: 0.75rem 1rem;
+  background-color: #28a745; /* Green color to distinguish it */
+  color: white;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 0.5rem;
+}
+
+.pdf-link button:hover {
+  background-color: #218838; /* Darker green on hover */
+}
+
+.pdf-link a {
+  display: inline-block;
+  padding: 0.75rem 1rem;
+  background-color: #007bff; /* Same as other buttons */
+  color: white;
+  font-size: 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  text-align: center;
+  margin-top: 0.5rem;
+  transition: background-color 0.3s;
+}
+
+.pdf-link a:hover {
+  background-color: #0056b3; /* Darker blue on hover */
 }
