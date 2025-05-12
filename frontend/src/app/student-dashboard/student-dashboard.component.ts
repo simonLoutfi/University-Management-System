@@ -28,6 +28,7 @@ export class StudentDashboardComponent implements OnInit {
 sortOrder: 'asc' | 'desc' = 'asc';
 sortField: 'title' | 'code' | 'professor__name' = 'title';
   private originalEnrolledCourses: any[] = [];
+  private originalAvailableCourses: any[] = [];
 
   constructor(
     private studentService: StudentService,
@@ -82,18 +83,19 @@ async loadStudentData() {
 }
 
 
-  async loadCourses() {
+async loadCourses() {
   try {
     this.loading = true;
     const response = await firstValueFrom(this.studentService.getStudentDashboard());
     if (response) {
       this.enrolled_courses = response.enrolled_courses || [];
-      this.originalEnrolledCourses = [...this.enrolled_courses]; // Update original data
+      this.originalEnrolledCourses = [...this.enrolled_courses];
       this.available_courses = response.available_courses || [];
+      this.originalAvailableCourses = [...this.available_courses]; // Store original available courses
     } else {
       throw new Error('No response received from server');
     }
-    this.searchAndSortCourses(); // Apply search and sort after loading
+    this.searchAndSortCourses();
     this.loading = false;
   } catch (error: any) {
     console.error('Failed to load courses:', error);
@@ -105,15 +107,20 @@ async loadStudentData() {
 searchAndSortCourses(): void {
   const query = this.searchQuery.trim().toLowerCase();
 
-  // Apply filter and sort to enrolled courses
-  let filteredEnrolledCourses = query ? this.filterCourses(this.originalEnrolledCourses, query) : [...this.originalEnrolledCourses];
-  this.enrolled_courses = this.sortCourses(filteredEnrolledCourses);
+  // Reset to original data if search query is empty
+  if (!query) {
+    this.enrolled_courses = [...this.originalEnrolledCourses];
+    this.available_courses = [...this.originalAvailableCourses]; // Fixed: Use originalAvailableCourses instead
+  } else {
+    // Apply filter if there's a search query
+    this.enrolled_courses = this.filterCourses(this.originalEnrolledCourses, query);
+    this.available_courses = this.filterCourses(this.originalAvailableCourses, query); // Fixed: Use originalAvailableCourses
+  }
 
-  // Apply filter and sort to available courses
-  let filteredAvailableCourses = query ? this.filterCourses(this.available_courses, query) : [...this.available_courses];
-  this.available_courses = this.sortCourses(filteredAvailableCourses);
+  // Apply sorting to both arrays
+  this.enrolled_courses = this.sortCourses(this.enrolled_courses);
+  this.available_courses = this.sortCourses(this.available_courses);
 }
-
 
 private filterCourses(courses: any[], query: string): any[] {
   return courses.filter(course =>
@@ -195,17 +202,17 @@ toggleSortOrder(): void {
   //   });
   // }
 
-  searchCourses() {
-    if (!this.searchQuery) {
-      this.loadCourses();
-      return;
-    }
+  // searchCourses() {
+  //   if (!this.searchQuery) {
+  //     this.loadCourses();
+  //     return;
+  //   }
 
-    this.enrolled_courses = this.enrolled_courses.filter(course =>
-      course.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-      course.code.toLowerCase().includes(this.searchQuery.toLowerCase())
-    );
-  }
+  //   this.enrolled_courses = this.enrolled_courses.filter(course =>
+  //     course.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+  //     course.code.toLowerCase().includes(this.searchQuery.toLowerCase())
+  //   );
+  // }
 
 // ...existing code...
 
