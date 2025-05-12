@@ -6,6 +6,7 @@ import { StudentService } from '../services/student.service';
 import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { PlatformCheckService } from '../services/platform-check.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-student-dashboard',
@@ -31,6 +32,7 @@ sortField: 'title' | 'code' | 'professor__name' = 'title';
   constructor(
     private studentService: StudentService,
     private router: Router,
+    private authService: AuthService,
     private platformCheck: PlatformCheckService
   ) {}
 
@@ -120,6 +122,14 @@ private filterCourses(courses: any[], query: string): any[] {
   );
 }
 
+async logout(): Promise<void> {
+    try {
+      this.authService.logout();
+      await this.router.navigate(['/login']);
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  }
 private sortCourses(courses: any[]): any[] {
   return courses.sort((a, b) => {
     const valueA = a[this.sortField]?.toString().toLowerCase() || '';
@@ -224,7 +234,7 @@ async updateEmail(): Promise<void> {
       }
     }
 
-    alert('Email and username updated successfully!');
+    alert('Email updated successfully!');
     this.error = null;
     
     // Optional: Reload the dashboard to reflect changes

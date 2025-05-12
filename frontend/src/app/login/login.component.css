@@ -1,9 +1,103 @@
+:root {
+  --primary-color: #4361ee;
+  --primary-hover: #3a56d4;
+  --error-color: #ef233c;
+  --text-color: #2b2d42;
+  --light-gray: #edf2f4;
+  --border-radius: 8px;
+  --transition: all 0.3s ease;
+}
+
 .login-container {
   max-width: 400px;
-  margin: auto;
-  padding: 20px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
 }
+
+.login-container h2 {
+  color: var(--text-color);
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.login-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.login-container form > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.login-container label {
+  color: var(--text-color);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.login-container input {
+  padding: 0.8rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  transition: var(--transition);
+}
+
+.login-container input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+}
+
+.login-container button {
+  background-color: rgb(77, 77, 255);
+  color: white;
+  padding: 0.8rem;
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.login-container button:hover {
+  background-color: rgb(62, 62, 255);
+  transform: translateY(-1px);
+}
+
+.login-container button:active {
+  transform: translateY(0);
+}
+
 .error {
-  color: red;
-  margin-top: 10px;
+  color: var(--error-color);
+  background-color: rgba(239, 35, 60, 0.1);
+  padding: 0.8rem;
+  border-radius: var(--border-radius);
+  font-size: 0.9rem;
+  text-align: center;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .login-container {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
 }
