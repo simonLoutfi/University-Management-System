@@ -14,15 +14,14 @@ import { CommonModule } from '@angular/common';
 export class StudentSignupComponent {
   name = '';
   email = '';
-  password = '';           // Added password field
-  confirmPassword = '';    // Added confirmPassword field
+  password = '';           
+  confirmPassword = '';   
   studentId = '';
   document: File | null = null;
   errorMessage = '';
 
   constructor(private authService: AuthService, private router: Router) {}
 
-// ...existing code...
 onSignup(): void {
   if (this.password !== this.confirmPassword) {
     this.errorMessage = 'Passwords do not match!';
@@ -41,7 +40,6 @@ onSignup(): void {
 
   this.authService.studentSignup(formData).subscribe(
     (response) => {
-      // After successful signup, login automatically
       const loginData = {
         username: this.email,
         password: this.password

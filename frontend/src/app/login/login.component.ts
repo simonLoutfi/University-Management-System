@@ -26,7 +26,6 @@ export class LoginComponent implements OnInit {
     try {
       this.document = inject(DOCUMENT);
     } catch {
-      // Handle SSR case where document is not available
       this.document = null;
     }
   }
@@ -38,7 +37,6 @@ export class LoginComponent implements OnInit {
     this.errorMessage = null;
     this.authService.login(this.username, this.password).subscribe({
       next: (response: any) => {
-        // Use Angular's router to navigate based on user type
         const userType = response.userType;
         const route = userType === 'professor' 
           ? ['dashboard', 'professor'] 
