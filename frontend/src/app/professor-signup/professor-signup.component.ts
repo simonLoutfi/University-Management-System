@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import { FormsModule } from '@angular/forms'; // Import FormsModule
-import { CommonModule } from '@angular/common'; // Import CommonModule, needed for standalone components
+import { FormsModule } from '@angular/forms'; 
+import { CommonModule } from '@angular/common'; 
 
 @Component({
   selector: 'app-professor-signup',
-  standalone: true, // Standalone component
-  imports: [CommonModule, FormsModule], // Include FormsModule here
+  standalone: true, 
+  imports: [CommonModule, FormsModule], 
   templateUrl: './professor-signup.component.html',
   styleUrls: ['./professor-signup.component.css']
 })
@@ -16,14 +16,13 @@ export class ProfessorSignupComponent {
   email = '';
   password = '';
   confirmPassword = '';
-  name = ''; // Added name field
-  department = ''; // Added department field
-  profilePicture: File | null = null; // Corrected to use profilePicture instead of profile_picture
+  name = ''; 
+  department = ''; 
+  profilePicture: File | null = null; 
   errorMessage = '';
 
   constructor(private authService: AuthService, private router: Router) {}
 
-// ...existing code...
   onSignup(): void {
     if (this.password !== this.confirmPassword) {
       this.errorMessage = 'Passwords do not match!';
@@ -31,7 +30,7 @@ export class ProfessorSignupComponent {
     }
 
     const formData = new FormData();
-    formData.append('username', this.email); // Using email as username
+    formData.append('username', this.email);
     formData.append('password', this.password);
     formData.append('name', this.name);
     formData.append('email', this.email);
@@ -42,7 +41,6 @@ export class ProfessorSignupComponent {
 
     this.authService.professorSignup(formData).subscribe(
       (response) => {
-        // After successful signup, login automatically
         const loginData = {
           username: this.email,
           password: this.password
@@ -67,6 +65,6 @@ export class ProfessorSignupComponent {
   }
 
   onFileChange(event: any): void {
-    this.profilePicture = event.target.files[0]; // Corrected to update profilePicture
+    this.profilePicture = event.target.files[0]; 
   }
 }

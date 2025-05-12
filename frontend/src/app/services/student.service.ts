@@ -30,12 +30,8 @@ private getHeaders(): HttpHeaders {
 
   private handleError(error: any): Observable<never> {
     console.error('API Error:', error);
-    
-    // Handle common error cases
     if (error.status === 401) {
       console.error('Unauthorized access - redirecting to login');
-      // Implement proper redirect to login
-      // You might want to use a router service here
       return throwError(() => new Error('Unauthorized'));
     }
     
@@ -62,14 +58,11 @@ private getHeaders(): HttpHeaders {
     );
   }
 
-
-// ...existing code...
-
 updateEmail(email: string): Observable<any> {
   const headers = this.getHeaders();
   const payload = { 
     email: email,
-    username: email  // Add username to payload
+    username: email 
   };
   
   return this.http.post(
@@ -84,7 +77,6 @@ updateEmail(email: string): Observable<any> {
   );
 }
 
-// ...existing code...
 
 
   enrollCourse(courseId: number): Observable<any> {

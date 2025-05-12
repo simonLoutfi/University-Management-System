@@ -1,4 +1,4 @@
-/* General Layout */
+
 html, body {
   height: 100%;
   margin: 0;
@@ -17,7 +17,6 @@ html, body {
   width: 100%;
 }
 
-/* Student Info */
 .student-info {
   background: #ffffff;
   padding: 2rem;
@@ -85,7 +84,6 @@ html, body {
   font-size: 0.95rem;
 }
 
-/* Courses Sections */
 .courses-section {
   background: #ffffff;
   padding: 2rem;
@@ -159,7 +157,6 @@ html, body {
   color: #888;
 }
 
-/* Search and Sort */
 .search-sort-container {
   display: flex;
   flex-direction: column;
@@ -189,11 +186,11 @@ html, body {
 .search-sort-container button:hover {
   background-color: #0056b3;
 }
-/* PDF Link Button */
+
 .pdf-link button {
-  width: auto; /* Adjusts width to content */
+  width: auto; 
   padding: 0.75rem 1rem;
-  background-color: #28a745; /* Green color to distinguish it */
+  background-color: #28a745;
   color: white;
   font-size: 1rem;
   border: none;
@@ -204,13 +201,13 @@ html, body {
 }
 
 .pdf-link button:hover {
-  background-color: #218838; /* Darker green on hover */
+  background-color: #218838; 
 }
 
 .pdf-link a {
   display: inline-block;
   padding: 0.75rem 1rem;
-  background-color: #007bff; /* Same as other buttons */
+  background-color: #007bff; 
   color: white;
   font-size: 1rem;
   border-radius: 8px;
@@ -221,5 +218,5 @@ html, body {
 }
 
 .pdf-link a:hover {
-  background-color: #0056b3; /* Darker blue on hover */
+  background-color: #0056b3; 
 }

@@ -42,7 +42,6 @@ export class EditCourseComponent implements OnInit {
       }
 
       try {
-        // Get course data from the list of professor courses
         const response = await this.courseService.getProfessorCourses().toPromise();
         const course = response.find((c: any) => c.id === this.courseId);
         

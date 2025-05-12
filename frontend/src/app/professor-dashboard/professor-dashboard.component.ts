@@ -74,12 +74,10 @@ export class ProfessorDashboardComponent implements OnInit {
       this.department = profile.department || '';
 
       if (profile.profile_picture) {
-        // Get just the filename from the path
         const filename = profile.profile_picture.split('/').pop() || '';
-        // Use the Django backend URL to serve the media file
         this.profilePictureUrl = `http://localhost:8000/media/professors/${filename}`;
       } else {
-        this.profilePictureUrl = null; // Clear any existing URL if no picture
+        this.profilePictureUrl = null; 
       }
       console.log('Profile Picture URL:', this.profilePictureUrl);
 
@@ -95,7 +93,6 @@ export class ProfessorDashboardComponent implements OnInit {
     this.loading = true;
     this.courseService.getProfessorCourses().subscribe({
       next: (response: any) => {
-        // Sort the courses based on current sort settings
         this.courses = [...response].sort((a: any, b: any): number => {
           const aValue = this.sortBy === 'title' ? a.title : a.code;
           const bValue = this.sortBy === 'title' ? b.title : b.code;

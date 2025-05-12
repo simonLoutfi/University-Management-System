@@ -49,12 +49,10 @@ export class StudentSearchComponent {
   constructor(private courseService: CourseService) {}
 
   onSearch() {
-    // Clear previous timeout
     if (this.searchTimeout) {
       clearTimeout(this.searchTimeout);
     }
 
-    // Set new timeout to avoid too many API calls
     this.searchTimeout = setTimeout(() => {
       if (this.searchQuery.length >= 2) {
         this.courseService.searchStudents(this.searchQuery)

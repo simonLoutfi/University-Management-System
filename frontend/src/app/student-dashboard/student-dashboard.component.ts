@@ -38,13 +38,11 @@ sortField: 'title' | 'code' | 'professor__name' = 'title';
   ) {}
 
   ngOnInit(): void {
-    // Check if we're in the browser environment
     if (!this.platformCheck.isBrowser()) {
       console.log('Skipping initialization during SSR');
       return;
     }
 
-    // Check if we have a valid token before loading data
     const token = this.platformCheck.getLocalStorage('access_token');
     if (!token) {
       this.router.navigate(['/login']);
@@ -62,7 +60,7 @@ async loadStudentData() {
       if (userData) {
         try {
           const user = JSON.parse(userData);
-          console.log('User data:', user); // Debugging line
+          console.log('User data:', user); 
 
           const profile = user.profile || user.student_profile;
 
@@ -91,7 +89,7 @@ async loadCourses() {
       this.enrolled_courses = response.enrolled_courses || [];
       this.originalEnrolledCourses = [...this.enrolled_courses];
       this.available_courses = response.available_courses || [];
-      this.originalAvailableCourses = [...this.available_courses]; // Store original available courses
+      this.originalAvailableCourses = [...this.available_courses];
     } else {
       throw new Error('No response received from server');
     }
@@ -107,17 +105,14 @@ async loadCourses() {
 searchAndSortCourses(): void {
   const query = this.searchQuery.trim().toLowerCase();
 
-  // Reset to original data if search query is empty
   if (!query) {
     this.enrolled_courses = [...this.originalEnrolledCourses];
-    this.available_courses = [...this.originalAvailableCourses]; // Fixed: Use originalAvailableCourses instead
+    this.available_courses = [...this.originalAvailableCourses];
   } else {
-    // Apply filter if there's a search query
     this.enrolled_courses = this.filterCourses(this.originalEnrolledCourses, query);
-    this.available_courses = this.filterCourses(this.originalAvailableCourses, query); // Fixed: Use originalAvailableCourses
+    this.available_courses = this.filterCourses(this.originalAvailableCourses, query); 
   }
 
-  // Apply sorting to both arrays
   this.enrolled_courses = this.sortCourses(this.enrolled_courses);
   this.available_courses = this.sortCourses(this.available_courses);
 }
@@ -146,32 +141,6 @@ private sortCourses(courses: any[]): any[] {
   });
 }
 
-
-private filterAndSortCourses(courses: any[]): any[] {
-  let filteredCourses = [...courses];
-
-  // Apply search filter
-  if (this.searchQuery) {
-    const query = this.searchQuery.toLowerCase();
-    filteredCourses = filteredCourses.filter(course =>
-      course.title.toLowerCase().includes(query) ||
-      course.code.toLowerCase().includes(query) ||
-      (course.professor__name && course.professor__name.toLowerCase().includes(query))
-    );
-  }
-
-  // Apply sorting
-  filteredCourses.sort((a, b) => {
-    const valueA = a[this.sortField]?.toString().toLowerCase() || '';
-    const valueB = b[this.sortField]?.toString().toLowerCase() || '';
-
-    return this.sortOrder === 'asc'
-      ? valueA.localeCompare(valueB)
-      : valueB.localeCompare(valueA);
-  });
-
-  return filteredCourses;
-}
 toggleSortOrder(): void {
   this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
   this.searchAndSortCourses();
@@ -188,34 +157,6 @@ toggleSortOrder(): void {
     }
   }
 
-  // sortCourses() {
-  //   this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
-  //   this.enrolled_courses.sort((a: any, b: any) => {
-  //     const valueA = a[this.sortBy].toString().toLowerCase();
-  //     const valueB = b[this.sortBy].toString().toLowerCase();
-      
-  //     if (this.sortOrder === 'asc') {
-  //       return valueA.localeCompare(valueB);
-  //     } else {
-  //       return valueB.localeCompare(valueA);
-  //     }
-  //   });
-  // }
-
-  // searchCourses() {
-  //   if (!this.searchQuery) {
-  //     this.loadCourses();
-  //     return;
-  //   }
-
-  //   this.enrolled_courses = this.enrolled_courses.filter(course =>
-  //     course.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-  //     course.code.toLowerCase().includes(this.searchQuery.toLowerCase())
-  //   );
-  // }
-
-// ...existing code...
-
 async updateEmail(): Promise<void> {
   if (!this.isEmailValid) {
     alert('Please enter a valid email address');
@@ -225,12 +166,10 @@ async updateEmail(): Promise<void> {
   try {
     const response = await firstValueFrom(this.studentService.updateEmail(this.email));
     
-    // Update local storage
     const userData = this.platformCheck.getLocalStorage('user');
     if (userData) {
       const user = JSON.parse(userData);
       if (user) {
-        // Update both username and email
         user.username = this.email;
         user.email = this.email;
         if (user.profile || user.student_profile) {
@@ -243,8 +182,6 @@ async updateEmail(): Promise<void> {
 
     alert('Email updated successfully!');
     this.error = null;
-    
-    // Optional: Reload the dashboard to reflect changes
     this.loadStudentData();
     
   } catch (error: any) {
@@ -254,21 +191,13 @@ async updateEmail(): Promise<void> {
   }
 }
 
-// ...existing code...
-
-// Change from private to public
 public isValidEmail(email: string): boolean {
   const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
   return emailPattern.test(email);
 }
-// ...existing code...
-
-// Add this getter before the constructor
 public get isEmailValid(): boolean {
   return !!this.email && this.isValidEmail(this.email);
 }
-
-// ...existing code...
 
   async unenrollCourse(courseId: number) {
     if (!confirm('Are you sure you want to unenroll from this course?')) {

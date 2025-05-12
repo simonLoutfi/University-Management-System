@@ -94,7 +94,7 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Responsive adjustments */
+
 @media (max-width: 480px) {
   .login-container {
     margin: 1rem;

@@ -67,16 +67,15 @@ export class CourseService {
       `${this.apiUrl}/professor/course/delete/${courseId}/`,
       { 
         headers: this.getHeaders(),
-        responseType: 'text'  // Change to text to handle HTML response
+        responseType: 'text'  
       }
     ).pipe(
       map(response => {
-        // If we get a response, assume it's a success
+       
         return { success: true };
       }),
       catchError(error => {
         console.error('Error deleting course:', error);
-        // Check if we got a 200 response with HTML
         if (error.status === 200) {
           return of({ success: true });
         }
@@ -117,11 +116,10 @@ export class CourseService {
   }
   getStudents(): Observable<any> {
     return this.http.get<Course[]>(
-      `${this.apiUrl}/api/professor/courses/`,  // Use the professor courses endpoint
+      `${this.apiUrl}/api/professor/courses/`, 
       { headers: this.getHeaders() }
     ).pipe(
       map((courses) => {
-        // Extract students from the courses response
         const students = new Set();
         courses.forEach((course) => {
           if (course.students) {
